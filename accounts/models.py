@@ -9,7 +9,15 @@ class Profile(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(null=True, blank=True)
-
-
+# after fields we have just one line white space and then write methods
     def __str__(self):
         return self.name
+
+# if you want write multple classes(like models here) between 2 classes you enter 2 lines white space.
+ # class model1:
+    # ------
+    # ------
+
+
+# class model2:
+    # -----
