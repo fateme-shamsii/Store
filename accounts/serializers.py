@@ -3,29 +3,40 @@ from django.contrib.auth.models import User
 from .models import Profile
 from django.db import transaction
 class RegisterSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only = True)
-    password2 = serializers.CharField(write_only = True)
+    password = serializers.CharField(write_only = True) # no white space here! ==> write_only=True
+    password2 = serializers.CharField(write_only = True) # same
     email = serializers.EmailField(required=True)
     mobile_phone = serializers.CharField(write_only = True)
     name = serializers.CharField(write_only = True)
 
     class Meta:
         model = User
-        fields = [
-            'name',
-            'username',
-            'email',
-            'mobile_phone',
-            'password',
-            'password2']
+        # fields = [
+        #     'name',
+        #     'username',
+        #     'email',
+        #     'mobile_phone',
+        #     'password',
+        #     'password2'] # not like this, use tuple instead of list. 
+        # do it like below
+     fields = (
+            'name', 'username', 'email', 'mobile_phone', 'password', 'password2'
+     )
 
     def create(self,validated_data):
         name = validated_data.pop('name')
         mobile_phone = validated_data.pop('mobile_phone')
         validated_data.pop('password2')      
         with transaction.atomic():
-            user = User.objects.create_user(username = validated_data['username'],email = validated_data['email'],password = validated_data['password'])
-            Profile.objects.create(user = user , name = name,mobile_phone =mobile_phone)
+            # too long line!
+           # user = User.objects.create_user(username = validated_data['username'],email = validated_data['email'],password = validated_data['password'])
+
+            # do it like this
+            user = User.objects.create_user(
+                username = validated_data['username'], email=validated_data['email'], password=validated_data['password']
+            ) # space after comma, follow the pep8 rules my girl!
+
+            Profile.objects.create(user = user , name = name,mobile_phone =mobile_phone) # wrong space again
         return user
     
     
