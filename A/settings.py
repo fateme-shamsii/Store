@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     # internal apps
     'accounts.apps.AccountsConfig',
     'city.apps.CityConfig',
+    'brand.apps.BrandConfig',
     # third party
     'rest_framework',
     'rest_framework.authtoken',
