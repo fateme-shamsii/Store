@@ -2,6 +2,8 @@ from rest_framework import serializers
 from django.contrib.auth.models import User
 from .models import Profile
 from django.db import transaction
+from django.contrib.auth import authenticate
+
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
     password2 = serializers.CharField(write_only=True)
@@ -75,6 +77,31 @@ class RegisterSerializer(serializers.ModelSerializer):
 
         return value
 
+
+class LoginSerializer(serializers.Serializer):
+    username = serializers.CharField()
+    password = serializers.CharField(write_only=True)
+
+    def validate(self,attr):
+        username = attr.get('username')
+        password = attr.get('password')
+
+        user = authenticate(
+            username = username,
+            password = password,
+        )
+        if user is None:
+                raise serializers.ValidationError(
+                    "password or username is not true"
+                    )
+
+        if not user.is_active:
+            raise serializers.ValidationError(
+                "user is not disabled."
+            )
+        attr['user'] = user
+        return attr
+        
 
 
 
