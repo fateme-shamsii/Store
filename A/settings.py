@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # internal apps
     'accounts.apps.AccountsConfig',
+    'city.apps.CityConfig',
     # third party
     'rest_framework',
     'rest_framework.authtoken',
