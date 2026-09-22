@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
     'city.apps.CityConfig',
     'brand.apps.BrandConfig',
+    'category.apps.CategoryConfig',
     # third party
     'rest_framework',
     'rest_framework.authtoken',
