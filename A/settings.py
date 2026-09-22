@@ -42,11 +42,13 @@ INSTALLED_APPS = [
     'city.apps.CityConfig',
     'brand.apps.BrandConfig',
     'category.apps.CategoryConfig',
+    'store.apps.StoreConfig',
     # third party
     'rest_framework',
     'rest_framework.authtoken',
    
 ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -74,6 +76,12 @@ TEMPLATES = [
         },
     },
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+}
 
 WSGI_APPLICATION = 'A.wsgi.application'
 
