@@ -25,4 +25,5 @@ urlpatterns = [
     path('api/brands/',include('brand.urls')),
     path('api/categories/',include('category.urls')),
     path('api/store/',include('store.urls')),
+    path('api/advertisment/',include('advertisment.urls')),
 ]

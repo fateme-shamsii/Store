@@ -1,8 +1,11 @@
 from rest_framework import serializers
+
 from django.contrib.auth.models import User
-from .models import Profile
 from django.db import transaction
 from django.contrib.auth import authenticate
+
+from .models import Profile
+from .services import UserService
 
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
@@ -24,18 +27,15 @@ class RegisterSerializer(serializers.ModelSerializer):
     def create(self,validated_data):
         name = validated_data.pop('name')
         mobile_phone = validated_data.pop('mobile_phone')
-        validated_data.pop('password2')      
-        with transaction.atomic():
-            user = User.objects.create_user(username=validated_data['username'],
-                                            email=validated_data['email'],
-                                            password=validated_data['password'],
-                                            )
-            Profile.objects.create(user=user,
-                                    name=name,
-                                    mobile_phone=mobile_phone,
-                                    )
-        return user
-    
+        validated_data.pop('password2')   
+           
+        return UserService.create_user_with_profile(
+            username=validated_data['username'],
+            email=validated_data['email'],
+            password=validated_data['password'],
+            name=name,
+            mobile_phone=mobile_phone,
+        )
     
     def validate(self, attrs):
         if attrs.get('password') != attrs.get('password2'):

@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'brand.apps.BrandConfig',
     'category.apps.CategoryConfig',
     'store.apps.StoreConfig',
+    'advertisment.apps.AdvertismentConfig',
     # third party
     'rest_framework',
     'rest_framework.authtoken',
@@ -137,3 +138,18 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+from celery.schedules import crontab
+
+
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379/0'
+CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379/0'
+CELERY_TIMEZONE = 'Asia/Tehran'
+
+CELERY_BEAT_SCHEDULE = {
+    'expire-old-advertisements-every-minute': {
+        'task': 'advertisment.tasks.expire_old_advertisements',
+        'schedule': crontab(minute='*/1'),
+    },
+}

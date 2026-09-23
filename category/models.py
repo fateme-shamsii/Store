@@ -1,12 +1,10 @@
 from django.db import models
+from core.models import BaseModel
 
-# Create your models here.
-
-class Category(models.Model):
+class Category(BaseModel):
     name =  models.CharField(max_length=100)
     is_active = models.BooleanField(default=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+
 
     def __str__(self):
         return self.name
