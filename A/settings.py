@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'category.apps.CategoryConfig',
     'store.apps.StoreConfig',
     'advertisment.apps.AdvertismentConfig',
+    'orders.apps.OrdersConfig',
     # third party
     'rest_framework',
     'rest_framework.authtoken',
