@@ -1,9 +1,10 @@
 from django.db import models
+from django.db.models import F, Q
 
 from brand.models import Brand
 from category.models import Category
-from store.models import Store
 from core.models import SoftDeleteModel
+from store.models import Store
 
 
 class AdvertisementStatus(models.IntegerChoices):
@@ -41,6 +42,26 @@ class Advertisement(SoftDeleteModel):
     total_quantity = models.PositiveIntegerField()
     hold_quantity = models.PositiveIntegerField(default=0)
     expires_at = models.DateTimeField()
+
+    class Meta:
+        constraints = [
+            models.CheckConstraint(
+                check=Q(price__gt=0),
+                name='advertisement_price_gt_0',
+            ),
+            models.CheckConstraint(
+                check=Q(total_quantity__gt=0),
+                name='advertisement_total_quantity_gt_0',
+            ),
+            models.CheckConstraint(
+                check=Q(hold_quantity__gte=0),
+                name='advertisement_hold_quantity_gte_0',
+            ),
+            models.CheckConstraint(
+                check=Q(total_quantity__gte=F('hold_quantity')),
+                name='advertisement_total_quantity_gte_hold_quantity',
+            ),
+        ]
 
     def __str__(self):
         return self.title
