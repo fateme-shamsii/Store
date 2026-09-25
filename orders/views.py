@@ -11,13 +11,7 @@ class OrderListCreateView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        orders = Order.objects.filter(
-            user=request.user,
-        ).prefetch_related(
-            'items',
-            'items_advertisement'
-        ).order_by('-created_at')
-
+        orders = Order.objects.filter(user=request.user,).prefetch_related( 'items','items_advertisement').order_by('-created_at')
         serializer = OrderSerializer(orders, many=True)
 
         return Response(serializer.data)
@@ -30,11 +24,7 @@ class OrderListCreateView(APIView):
             user=request.user,
             items=serializer.validated_data['items'],
         )
-
         response_serializer = OrderSerializer(order)
 
-        return Response(
-            response_serializer.data,
-            status=status.HTTP_201_CREATED,
-        )
+        return Response(response_serializer.data, status=status.HTTP_201_CREATED,)
 

@@ -19,10 +19,7 @@ class RegisterUserView(APIView):
         return Response({
             "message": "You have been registered successfully",
             "token": token.key,
-            "user": {
-                "username": user.username,
-                "email": user.email,
-            }
+            "user": {"username": user.username, "email": user.email,}
         }, status=status.HTTP_201_CREATED)
 
 
@@ -37,10 +34,7 @@ class LoginUserView(APIView):
         return Response({
             "message": "You have been logged successfully",
             "token": token.key,
-            "user_info":{
-                "username": user.username,
-                "email": user.email,
-            }
+            "user_info":{"username": user.username, "email": user.email,}
         }, status=status.HTTP_200_OK)
 
 

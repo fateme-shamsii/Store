@@ -6,42 +6,23 @@ from django.utils import timezone
 class AdvertisementCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Advertisement
-        fields = (
-            'id',
-            'brand',
-            'category',
-            'store',
-            'title',
-            'description',
-            'price',
-            'status',
-            'total_quantity',
-            'expires_at',
-        )
-        read_only_fields = (
-            'id',
-            'status',
-        )
+        fields = ('id', 'brand', 'category', 'store', 'title', 'description', 'price',
+                'status', 'total_quantity', 'expires_at',)
+        read_only_fields = ('id', 'status',)
 
     def validate_price(self, value):
         if value <= 0:
-            raise serializers.ValidationError(
-                "Price must be greater than zero"
-            )
+            raise serializers.ValidationError("Price must be greater than zero")
         return value
     
     def validate_expires_at(self, value):
         if value <= timezone.now():
-            raise serializers.ValidationError(
-                "Expiration date must be in the future."
-            )
+            raise serializers.ValidationError("Expiration date must be in the future.")
         return value
 
     def validate_total_quantity(self, value):
         if value <= 0:
-            raise serializers.ValidationError(
-                "Total quantity must be greater than zero"
-            )
+            raise serializers.ValidationError("Total quantity must be greater than zero")
         return value  
        
     def validate(self, attrs):
@@ -51,27 +32,19 @@ class AdvertisementCreateSerializer(serializers.ModelSerializer):
         category = attrs.get('category')
 
         if not store.is_active:
-            raise serializers.ValidationError(
-                "Selected Store is not active."
-            )
+            raise serializers.ValidationError("Selected Store is not active.")
 
         if brand and store.status != StoreStatus.ACCEPTED:
             raise serializers.ValidationError("user can't buy the brand")
 
         if brand and not brand.is_active:
-            raise serializers.ValidationError(
-                "Selected brand is not active."
-            )
+            raise serializers.ValidationError("Selected brand is not active.")
         
         if category and not category.is_active:
-            raise serializers.ValidationError(
-                "Selected category is not active."
-            )
+            raise serializers.ValidationError("Selected category is not active.")
 
         if store.owner != request.user:
-            raise serializers.ValidationError(
-                "You can only create advertisements for your own store."
-            )
+            raise serializers.ValidationError("You can only create advertisements for your own store.")
         return attrs
         
 
@@ -84,25 +57,8 @@ class AdvertisementListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Advertisement
-        fields = (
-            'id',
-            'title',
-            'description',
-            'price',
-            'store',
-            'store_name',
-            'category',
-            'category_name',
-            'brand',
-            'brand_name',
-            'status',
-            'status_display',
-            'total_quantity',
-            'hold_quantity',
-            'available_quantity',
-            'expires_at',
-        )
-
+        fields = ('id', 'title', 'description', 'price', 'store', 'store_name', 'category', 'category_name',
+               'brand', 'brand_name', 'status', 'status_display', 'total_quantity', 'hold_quantity', 'available_quantity', 'expires_at',)
 
     def get_brand_name(self, obj):
         if obj.brand:

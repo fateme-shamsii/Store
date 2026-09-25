@@ -2,7 +2,8 @@ from django.db import transaction
 from django.utils import timezone
 from rest_framework.exceptions import ValidationError
 
-from advertisment.models import Advertisement, AdvertisementStatus
+from advertisment.models import Advertisement
+from core.choices import Status
 from .models import Order, OrderItem
 
 class OrderService:
@@ -64,7 +65,7 @@ class OrderService:
     
     @staticmethod
     def validate_advertisement_for_order(*, advertisement, quantity):
-        if advertisement.status != AdvertisementStatus.ACCEPTED:
+        if advertisement.status != Status.ACCEPTED:
             raise ValidationError(
                 "Advertisement is not available for ordering."
             )

@@ -2,13 +2,7 @@ from django.db import models
 from django.conf import settings
 from city.models import City 
 from core.models import SoftDeleteModel
-
-
-class StoreStatus(models.IntegerChoices):
-    PENDING = 1, "Pending"
-    ACCEPTED = 2, "Accepted"
-    REJECTED = 3, "Rejected"
-
+from core.choices import StoreStatus
 
 class Store(SoftDeleteModel):
     owner = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='store')

@@ -1,11 +1,12 @@
 from rest_framework import serializers
 
-from django.contrib.auth.models import User
-from django.db import transaction
+from django.contrib.auth import authenticate, get_user_model
 from django.contrib.auth import authenticate
 
 from .models import Profile
 from .services import UserService
+
+User = get_user_model()
 
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
@@ -16,13 +17,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = (
-            'name',
-            'username',
-            'email',
-            'mobile_phone',
-            'password',
-            'password2')
+        fields = ('name', 'username', 'email', 'mobile_phone', 'password', 'password2')
 
     def create(self,validated_data):
         name = validated_data.pop('name')
@@ -69,7 +64,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         if not value.isdigit():
             raise serializers.ValidationError("Mobile phone must contain only digits.")
 
-        if len(value)!= 11:
+        if len(value) != 11:
             raise serializers.ValidationError("Mobile phone length is invalid.")
 
         if Profile.objects.filter(mobile_phone=value).exists():
@@ -91,14 +86,10 @@ class LoginSerializer(serializers.Serializer):
             password = password,
         )
         if user is None:
-                raise serializers.ValidationError(
-                    "password or username is not true"
-                    )
+            raise serializers.ValidationError("password or username is not true")
 
         if not user.is_active:
-            raise serializers.ValidationError(
-                "user is not disabled."
-            )
+            raise serializers.ValidationError("User account is disabled.")
         attr['user'] = user
         return attr
         
